@@ -2,16 +2,28 @@ import { useState } from 'react';
 import RegisterUI from './presentational/RegisterUI';
 
 const Register = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [userRole, setUserRole] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    // Employee fields
+    companyName: '',
+    location: '',
+    industry: '',
+    // Job seeker fields
+    hasExperience: 'false',
+    skills: '',
+    position: '',
+    yearsOfExperience: '',
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
       // API integration will be added here
-      console.log('Registration credentials:', { email, password });
+      console.log('Registration data:', { ...formData, role: userRole });
     } catch (error) {
       console.error('Registration error:', error);
     } finally {
@@ -21,12 +33,12 @@ const Register = () => {
 
   return (
     <RegisterUI
-      email={email}
-      setEmail={setEmail}
-      password={password}
-      setPassword={setPassword}
+      formData={formData}
+      setFormData={setFormData}
       handleSubmit={handleSubmit}
       isLoading={isLoading}
+      userRole={userRole}
+      setUserRole={setUserRole}
     />
   );
 };
