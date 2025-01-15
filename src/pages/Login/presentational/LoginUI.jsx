@@ -4,24 +4,24 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Link } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
-
+import img from '../../../assets/online-job-interview_23-2148612474.jpg';
 const LoginUI = ({ email, setEmail, password, setPassword, handleSubmit, isLoading }) => {
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
-      {/* Image Section */}
-      <div className="hidden md:flex md:w-1/2 bg-primary/10">
-        <div className="w-full h-full flex items-center justify-center p-8">
+    <div className="min-h-screen flex flex-row">
+      {/* Image Section - Left */}
+      <div className="hidden md:flex md:w-1/2 bg-primary/10 h-screen fixed left-0">
+        <div className="w-full h-full flex items-center justify-center">
           <img
-            src="/api/placeholder/600/400"
+            src={img}
             alt="Login"
-            className="max-w-full h-auto rounded-lg shadow-xl"
+            className="w-full h-full object-cover"
           />
         </div>
       </div>
 
-      {/* Form Section */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-4 md:p-8 bg-white">
-        <Card className="w-full max-w-md border-none shadow-none">
+      {/* Form Section - Right */}
+      <div className="w-full md:w-1/2 min-h-screen flex items-center justify-center bg-white md:ml-[50%]">
+        <Card className="w-full max-w-md border-none shadow-none mx-4">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl md:text-3xl font-bold text-center">Welcome Back</CardTitle>
             <p className="text-center text-gray-500">Enter your credentials to access your account</p>

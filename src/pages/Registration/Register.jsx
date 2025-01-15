@@ -12,9 +12,10 @@ const Register = () => {
     location: '',
     industry: '',
     // Job seeker fields
+    hasExperience: 'false',
     skills: '',
-    profession: '',
-    experience: ''
+    position: '',
+    yearsOfExperience: '',
   });
 
   const handleSubmit = async (e) => {
