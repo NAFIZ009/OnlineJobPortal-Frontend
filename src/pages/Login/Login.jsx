@@ -1,16 +1,12 @@
 // src/pages/Login/Login.jsx
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { authService } from "@/lib/api/apiService";
+import { useNavigate } from "react-router-dom";
+import { loginUser } from "@/lib/api/apiService";
 import LoginUI from "./presentational/LoginUI";
 import { toast } from "react-hot-toast";
-import { useAuth } from "@/lib/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { setAuth } = useAuth();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -22,15 +18,10 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await authService.login(email, password);
-      setAuth(response);
-
-      // Show success message
+      const data = await loginUser(email, password);
+      localStorage.setItem("accessToken", data.accessToken);
       toast.success("Login successful!");
-
-      // Redirect to the intended page or dashboard
-      const from = location.state?.from?.pathname || "/dashboard";
-      navigate(from, { replace: true });
+      navigate("/dashboard");
     } catch (error) {
       setError(error.message);
       toast.error(error.message);
