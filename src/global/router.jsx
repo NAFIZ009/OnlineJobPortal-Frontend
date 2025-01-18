@@ -7,6 +7,7 @@ import Login from "@/pages/Login/Login";
 import Register from "@/pages/Registration/Register";
 import JobSeekerDashboard from "@/pages/JobSeeker/JobSeekerDashboard";
 import MainLayouts from "./MainLayouts";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,9 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: <JobSeekerDashboard />,
+        element: <ProtectedRoute allowedRoles={['jobseeker', 'employee']}>
+        <JobSeekerDashboard />
+      </ProtectedRoute>,
       },
       // Add more routes as needed
     ],

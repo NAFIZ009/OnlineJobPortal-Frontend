@@ -1,37 +1,45 @@
-import { useState } from 'react';
-import Banner from './components/Banner';
-import JobCard from './components/JobCard';
-import Footer from './components/Footer';
+// src/pages/JobSeeker/JobSeekerDashboard.jsx
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import HeroSection from "./components/HeroSection";
+import Banner from "./components/Banner";
+import LatestJobsSection from "./components/LatestJobsSection";
+import FeaturedCompaniesSection from "./components/FeaturedCompaniesSection";
+import WhyChooseUsSection from "./components/WhyChooseUsSection";
+import Footer from "./components/Footer";
 
-const SAMPLE_JOBS = [
-  {
-    id: 1,
-    position: "Senior Frontend Developer",
-    companyName: "Tech Solutions Inc.",
-    location: "New York, NY",
-    salary: "$120,000 - $150,000",
-    postedAt: "2024-01-14T10:00:00",
-    applications: 45
-  },
-  // Add more sample jobs here
-];
 
 const JobSeekerDashboard = () => {
-  const [jobs] = useState(SAMPLE_JOBS);
+  const [isLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  const handleActionClick = (action) => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+    // Handle logged-in user actions
+    console.log(`Handling ${action} for logged-in user`);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Banner */}
       <Banner />
-      
-      <main className="max-w-7xl mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold text-gray-900 mb-8">Latest Job Openings</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {jobs.map(job => (
-            <JobCard key={job.id} job={job} />
-          ))}
-        </div>
-      </main>
 
+      {/* Hero Section with Search */}
+      <HeroSection onActionClick={handleActionClick} />
+
+      {/* Latest Jobs Section */}
+      <LatestJobsSection onActionClick={handleActionClick} />
+
+      {/* Featured Companies Section */}
+      <FeaturedCompaniesSection onActionClick={handleActionClick} />
+
+      {/* Why Choose Us Section */}
+      <WhyChooseUsSection />
+
+      {/* Footer */}
       <Footer />
     </div>
   );
