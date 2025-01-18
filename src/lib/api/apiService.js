@@ -12,7 +12,7 @@ const api = axios.create({
   },
 });
 
-// Add a request interceptor
+// Add request interceptor
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
@@ -26,10 +26,10 @@ api.interceptors.request.use(
   }
 );
 
-// Add a response interceptor
+// Add response interceptor
 api.interceptors.response.use(
   (response) => response,
-  async (error) => {
+  (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem("accessToken");
       window.location.href = "/login";
@@ -38,77 +38,100 @@ api.interceptors.response.use(
   }
 );
 
-// Auth Services
-export const authService = {
-  login: async (email, password) => {
-    try {
-      const response = await api.post("/login", { email, password });
-      if (response.data?.accessToken) {
-        localStorage.setItem("accessToken", response.data.accessToken);
-      }
-      return response.data;
-    } catch (error) {
-      throw new Error(error.response?.data?.message || "Login failed");
-    }
-  },
-
-  register: async (userData) => {
-    try {
-      const response = await api.post("/register", userData);
-      return response.data;
-    } catch (error) {
-      throw new Error(error.response?.data?.message || "Registration failed");
-    }
-  },
-
-  getLoggedInUserRole: () => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      return decodedToken.roles;
-    }
-    return "";
-  },
-
-  logout: () => {
-    localStorage.removeItem("accessToken");
-  },
+// Auth functions
+export const loginUser = async (email, password) => {
+  try {
+    const response = await api.post("/login", { email, password });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Login failed");
+  }
 };
 
-// Jobs Services
-export const jobsService = {
-  getAllJobs: async (searchParam = "") => {
+export const register = async (userData) => {
+  try {
+    const response = await api.post("/register", userData);
+    return {
+      success: true,
+      message: "Registration successful",
+      data: response.data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Registration failed",
+    };
+  }
+};
+
+export const getLoggedInUserRole = () => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    const decodedToken = jwtDecode(token);
+    return decodedToken.roles;
+  }
+  return "";
+};
+
+// Jobs functions
+export const getAllJobList = async (searchParam = "") => {
+  try {
     const url = searchParam
       ? `/jobs?search=${encodeURIComponent(searchParam)}`
       : "/jobs";
     const response = await api.get(url);
     return response.data;
-  },
+  } catch (error) {
+    throw new Error("Failed to fetch jobs");
+  }
+};
 
-  getJobById: async (id) => {
+export const getJobById = async (id) => {
+  try {
     const response = await api.get(`/jobs/${id}`);
     return response.data;
-  },
+  } catch (error) {
+    throw new Error("Failed to fetch job details");
+  }
+};
 
-  postJob: async (jobData) => {
-    try {
-      const response = await api.post("/jobs", jobData);
-      return response.data;
-    } catch (error) {
-      throw new Error(error.response?.data?.message || "Failed to post job");
-    }
-  },
+export const postNewJobs = async (job) => {
+  try {
+    const response = await api.post("/jobs", job);
+    return {
+      success: true,
+      message: "Job posted successfully",
+      data: response.data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Failed to post job",
+    };
+  }
+};
 
-  applyForJob: async (jobId) => {
-    try {
-      const response = await api.post(`/application/${jobId}`);
-      return response.data;
-    } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Failed to apply for job"
-      );
-    }
-  },
+export const applyForJob = async (jobId) => {
+  try {
+    const response = await api.post(`/application/${jobId}`);
+    return {
+      success: true,
+      message: "Application submitted successfully",
+      data: response.data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Failed to submit application",
+    };
+  }
+};
+
+export const getHeaders = () => {
+  const token = localStorage.getItem("accessToken");
+  return {
+    Authorization: `Bearer ${token}`,
+  };
 };
 
 export default api;
